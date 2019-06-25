@@ -26,6 +26,8 @@ function Star(x, y, radius, color) {
         x: 0,
         y: 3
     }
+    this.friction = 0.8
+    this.gravity = 1
 }
 
 Star.prototype.draw = function() {
@@ -40,10 +42,10 @@ Star.prototype.update = function() {
     this.draw()
 
     //When ball hits bottom of screen
-    if (this.y + this.radius > canvas.height) {
-        this.velocity.y = -this.velocity.y * 0.8
+    if (this.y + this.radius + this.velocity.y > canvas.height) {
+        this.velocity.y = -this.velocity.y * this.friction
     } else {
-        this.velocity.y += 1
+        this.velocity.y += this.gravity
     }
 
     this.y += this.velocity.y
