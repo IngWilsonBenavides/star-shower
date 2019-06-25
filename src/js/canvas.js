@@ -41,7 +41,7 @@ Star.prototype.update = function() {
 
     //When ball hits bottom of screen
     if (this.y + this.radius > canvas.height) {
-        this.velocity.y = -this.velocity.y
+        this.velocity.y = -this.velocity.y * 0.8
     } else {
         this.velocity.y += 1
     }
