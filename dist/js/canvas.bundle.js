@@ -157,7 +157,7 @@ Star.prototype.update = function () {
 Star.prototype.shatter = function () {
     this.radius -= 3;
     for (var i = 0; i < 8; i++) {
-        miniStars.push(new MiniStar(this.x, this.y, 2, 'red'));
+        miniStars.push(new MiniStar(this.x, this.y, 2));
     }
 };
 
@@ -169,12 +169,14 @@ function MiniStar(x, y, radius, color) {
     };
     this.friction = 0.8;
     this.gravity = 0.1;
+    this.ttl = 100;
+    this.opacity = 1;
 }
 
 MiniStar.prototype.draw = function () {
     c.beginPath();
     c.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
-    c.fillStyle = this.color;
+    c.fillStyle = 'rgba(255, 0, 0, ' + this.opacity + ')';
     c.fill();
     c.closePath();
 };
@@ -191,6 +193,8 @@ MiniStar.prototype.update = function () {
 
     this.x += this.velocity.x;
     this.y += this.velocity.y;
+    this.ttl -= 1;
+    this.opacity -= 1 / this.ttl;
 };
 
 // Implementation
@@ -217,8 +221,11 @@ function animate() {
         }
     });
 
-    miniStars.forEach(function (ministar) {
+    miniStars.forEach(function (ministar, index) {
         ministar.update();
+        if (ministar.ttl == 0) {
+            miniStars.splice(index, 1);
+        }
     });
 }
 
