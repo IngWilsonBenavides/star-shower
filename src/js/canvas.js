@@ -44,6 +44,7 @@ Star.prototype.update = function() {
     //When ball hits bottom of screen
     if (this.y + this.radius + this.velocity.y > canvas.height) {
         this.velocity.y = -this.velocity.y * this.friction
+        this.shatter()
     } else {
         this.velocity.y += this.gravity
     }
@@ -51,10 +52,50 @@ Star.prototype.update = function() {
     this.y += this.velocity.y
 }
 
+Star.prototype.shatter = function() {
+    for (let i = 0; i < 8; i++) {
+        miniStars.push(new MiniStar(this.x, this.y, 2, 'red'))
+    }    
+}
+
+function MiniStar(x, y, radius, color) {
+    Star.call(this, x, y, radius, color)
+    this.velocity = {
+        x: utils.randomIntFromRange(-5, 5),
+        y: 3
+    }
+    this.friction = 0.8
+    this.gravity = 1
+}
+
+MiniStar.prototype.draw = function() {
+    c.beginPath()
+    c.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false)
+    c.fillStyle = this.color
+    c.fill()
+    c.closePath()
+}
+
+MiniStar.prototype.update = function() {
+    this.draw()
+
+    //When ball hits bottom of screen
+    if (this.y + this.radius + this.velocity.y > canvas.height) {
+        this.velocity.y = -this.velocity.y * this.friction
+    } else {
+        this.velocity.y += this.gravity
+    }
+
+    this.x += this.velocity.x
+    this.y += this.velocity.y
+}
+
 // Implementation
 let stars
+let miniStars
 function init() {
     stars = []
+    miniStars = []
 
     for (let i = 0; i < 1; i++) {
         stars.push(new Star(canvas.width / 2, 30, 30, 'blue'))
@@ -69,6 +110,10 @@ function animate() {
     stars.forEach(star => {
         star.update()
     })
+
+    miniStars.forEach(ministar => {
+        ministar.update()
+    });
 }
 
 init()
