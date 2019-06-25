@@ -108,19 +108,9 @@ var c = canvas.getContext('2d');
 canvas.width = innerWidth;
 canvas.height = innerHeight;
 
-var mouse = {
-    x: innerWidth / 2,
-    y: innerHeight / 2
-};
-
 var colors = ['#2185C5', '#7ECEFD', '#FFF6E5', '#FF7F66'];
 
 // Event Listeners
-addEventListener('mousemove', function (event) {
-    mouse.x = event.clientX;
-    mouse.y = event.clientY;
-});
-
 addEventListener('resize', function () {
     canvas.width = innerWidth;
     canvas.height = innerHeight;
@@ -129,14 +119,14 @@ addEventListener('resize', function () {
 });
 
 // Objects
-function Object(x, y, radius, color) {
+function Star(x, y, radius, color) {
     this.x = x;
     this.y = y;
     this.radius = radius;
     this.color = color;
 }
 
-Object.prototype.draw = function () {
+Star.prototype.draw = function () {
     c.beginPath();
     c.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
     c.fillStyle = this.color;
@@ -144,17 +134,19 @@ Object.prototype.draw = function () {
     c.closePath();
 };
 
-Object.prototype.update = function () {
+Star.prototype.update = function () {
     this.draw();
+
+    this.y += 1;
 };
 
 // Implementation
-var objects = void 0;
+var stars = void 0;
 function init() {
-    objects = [];
+    stars = [];
 
-    for (var i = 0; i < 400; i++) {
-        // objects.push()
+    for (var i = 0; i < 1; i++) {
+        stars.push(new Star(canvas.width / 2, 30, 30, 'blue'));
     }
 }
 
@@ -163,10 +155,9 @@ function animate() {
     requestAnimationFrame(animate);
     c.clearRect(0, 0, canvas.width, canvas.height);
 
-    c.fillText('HTML CANVAS BOILERPLATE', mouse.x, mouse.y);
-    // objects.forEach(object => {
-    //  object.update()
-    // })
+    stars.forEach(function (star) {
+        star.update();
+    });
 }
 
 init();
