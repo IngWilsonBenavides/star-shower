@@ -133,11 +133,15 @@ function Star(x, y, radius, color) {
 }
 
 Star.prototype.draw = function () {
+    c.save();
     c.beginPath();
     c.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
     c.fillStyle = this.color;
+    c.shadowColor = '#E3EAEF';
+    c.shadowBlur = 20;
     c.fill();
     c.closePath();
+    c.restore();
 };
 
 Star.prototype.update = function () {
@@ -174,11 +178,15 @@ function MiniStar(x, y, radius, color) {
 }
 
 MiniStar.prototype.draw = function () {
+    c.save();
     c.beginPath();
     c.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
-    c.fillStyle = 'rgba(255, 0, 0, ' + this.opacity + ')';
+    c.fillStyle = 'rgba(227, 234, 239, ' + this.opacity + ')';
+    c.shadowColor = '#E3EAEF';
+    c.shadowBlur = 20;
     c.fill();
     c.closePath();
+    c.restore();
 };
 
 MiniStar.prototype.update = function () {
@@ -224,7 +232,7 @@ function init() {
     backgroundStars = [];
 
     for (var i = 0; i < 1; i++) {
-        stars.push(new Star(canvas.width / 2, 30, 30, 'blue'));
+        stars.push(new Star(canvas.width / 2, 30, 30, '#E3EAEF'));
     }
 
     for (var _i = 0; _i < 150; _i++) {
