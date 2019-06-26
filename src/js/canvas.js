@@ -97,11 +97,12 @@ MiniStar.prototype.update = function() {
 
 function createMountainRange(mountainAmount, height, color) {
     for (let i = 0; i < mountainAmount; i++) {
+        const mountainWidth = canvas.width / mountainAmount        
         c.beginPath()
-        c.moveTo(0, canvas.height)
-        c.lineTo(canvas.width, canvas.height)
-        c.lineTo(canvas.width / 2, canvas.height - height)
-        c.lineTo(0, canvas.height)
+        c.moveTo(i * mountainWidth, canvas.height)
+        c.lineTo(i * mountainWidth + mountainWidth + 325, canvas.height)
+        c.lineTo(i * mountainWidth + mountainWidth / 2, canvas.height - height)
+        c.lineTo(i * mountainWidth - 325, canvas.height)
         c.fillStyle = color
         c.fill()
         c.closePath()
@@ -114,12 +115,21 @@ backgroundGradient.addColorStop(0, '#171e26')
 backgroundGradient.addColorStop(1, '#3f586b')
 let stars
 let miniStars
+let backgroundStars
 function init() {
     stars = []
     miniStars = []
+    backgroundStars = []
 
     for (let i = 0; i < 1; i++) {
         stars.push(new Star(canvas.width / 2, 30, 30, 'blue'))
+    }
+
+    for (let i =  0; i < 150; i++) {
+        const x = Math.random() * canvas.width
+        const y = Math.random() * canvas.height        
+        const radius = Math.random() * 3        
+        backgroundStars.push(new Star(x, y, radius, 'white'))
     }
 }
 
@@ -127,10 +137,16 @@ function init() {
 function animate() {
     requestAnimationFrame(animate)
     c.fillStyle = backgroundGradient
-    c.fillRect(0, 0, canvas.width, canvas.height)
-
-    createMountainRange(1, 100, 'white')
+    c.fillRect(0, 0, canvas.width, canvas.height)    
     
+    backgroundStars.forEach(backgroundStar => {
+        backgroundStar.draw()
+    })
+
+    createMountainRange(1, canvas.height - 50, '#384551')
+    createMountainRange(2, canvas.height - 100, '#2B3843')
+    createMountainRange(3, canvas.height - 300, '#26333E')
+
     stars.forEach((star, index) => {
         star.update()
         if (star.radius == 0) {
@@ -143,7 +159,7 @@ function animate() {
         if (ministar.ttl == 0) {
             miniStars.splice(index, 1)
         }
-    });
+    })    
 }
 
 init()
