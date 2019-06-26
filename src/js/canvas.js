@@ -23,7 +23,7 @@ function Star(x, y, radius, color) {
     this.radius = radius
     this.color = color
     this.velocity = {
-        x: 0,
+        x: utils.randomIntFromRange(-4, 4),
         y: 3
     }
     this.friction = 0.8
@@ -53,7 +53,8 @@ Star.prototype.update = function() {
         this.velocity.y += this.gravity
     }
 
-    this.y += this.velocity.y
+    this.x += this.velocity.x
+    this.y += this.velocity.y    
 }
 
 Star.prototype.shatter = function() {
@@ -124,14 +125,16 @@ backgroundGradient.addColorStop(1, '#3f586b')
 let stars
 let miniStars
 let backgroundStars
+let ticker = 0
+let randomSpawnRate = 75
 function init() {
     stars = []
     miniStars = []
     backgroundStars = []
 
-    for (let i = 0; i < 1; i++) {
-        stars.push(new Star(canvas.width / 2, 30, 30, '#E3EAEF'))
-    }
+    // for (let i = 0; i < 1; i++) {
+    //     stars.push(new Star(canvas.width / 2, 30, 30, '#E3EAEF'))
+    // }
 
     for (let i =  0; i < 150; i++) {
         const x = Math.random() * canvas.width
@@ -167,7 +170,14 @@ function animate() {
         if (ministar.ttl == 0) {
             miniStars.splice(index, 1)
         }
-    })    
+    })
+
+    ticker++  
+    if (ticker % randomSpawnRate == 0) {
+        const x = Math.random() * canvas.width
+        stars.push(new Star(x, -100, 12, 'white'))
+        randomSpawnRate = utils.randomIntFromRange(75, 200)
+    }  
 }
 
 init()
