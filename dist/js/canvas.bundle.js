@@ -197,6 +197,19 @@ MiniStar.prototype.update = function () {
     this.opacity -= 1 / this.ttl;
 };
 
+function createMountainRange(mountainAmount, height, color) {
+    for (var i = 0; i < mountainAmount; i++) {
+        c.beginPath();
+        c.moveTo(0, canvas.height);
+        c.lineTo(canvas.width, canvas.height);
+        c.lineTo(canvas.width / 2, canvas.height - height);
+        c.lineTo(0, canvas.height);
+        c.fillStyle = color;
+        c.fill();
+        c.closePath();
+    }
+}
+
 // Implementation
 var backgroundGradient = c.createLinearGradient(0, 0, 0, canvas.height);
 backgroundGradient.addColorStop(0, '#171e26');
@@ -217,6 +230,8 @@ function animate() {
     requestAnimationFrame(animate);
     c.fillStyle = backgroundGradient;
     c.fillRect(0, 0, canvas.width, canvas.height);
+
+    createMountainRange(1, 100, 'white');
 
     stars.forEach(function (star, index) {
         star.update();
