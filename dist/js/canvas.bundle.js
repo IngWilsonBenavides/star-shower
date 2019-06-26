@@ -125,7 +125,7 @@ function Star(x, y, radius, color) {
     this.radius = radius;
     this.color = color;
     this.velocity = {
-        x: _utils2.default.randomIntFromRange(-4, 4),
+        x: (Math.random() - 0.5) * 8,
         y: 3
     };
     this.friction = 0.8;
@@ -148,11 +148,17 @@ Star.prototype.update = function () {
     this.draw();
 
     //When ball hits bottom of screen
-    if (this.y + this.radius + this.velocity.y > canvas.height) {
+    if (this.y + this.radius + this.velocity.y > canvas.height - groundHeight) {
         this.velocity.y = -this.velocity.y * this.friction;
         this.shatter();
     } else {
         this.velocity.y += this.gravity;
+    }
+
+    // Hits side of screen
+    if (this.x + this.radius + this.velocity.x > canvas.width || this.x - this.radius <= 0) {
+        this.velocity.x = -this.velocity.x * this.friction;
+        this.shatter;
     }
 
     this.x += this.velocity.x;
@@ -194,7 +200,7 @@ MiniStar.prototype.update = function () {
     this.draw();
 
     //When ball hits bottom of screen
-    if (this.y + this.radius + this.velocity.y > canvas.height) {
+    if (this.y + this.radius + this.velocity.y > canvas.height - groundHeight) {
         this.velocity.y = -this.velocity.y * this.friction;
     } else {
         this.velocity.y += this.gravity;
@@ -229,6 +235,7 @@ var miniStars = void 0;
 var backgroundStars = void 0;
 var ticker = 0;
 var randomSpawnRate = 75;
+var groundHeight = 100;
 function init() {
     stars = [];
     miniStars = [];
@@ -259,6 +266,8 @@ function animate() {
     createMountainRange(1, canvas.height - 50, '#384551');
     createMountainRange(2, canvas.height - 100, '#2B3843');
     createMountainRange(3, canvas.height - 300, '#26333E');
+    c.fillStyle = '#182028';
+    c.fillRect(0, canvas.height - groundHeight, canvas.width, groundHeight);
 
     stars.forEach(function (star, index) {
         star.update();
@@ -276,8 +285,9 @@ function animate() {
 
     ticker++;
     if (ticker % randomSpawnRate == 0) {
-        var x = Math.random() * canvas.width;
-        stars.push(new Star(x, -100, 12, 'white'));
+        var radius = 12;
+        var x = Math.max(radius, Math.random() * canvas.width - radius);
+        stars.push(new Star(x, -100, radius, 'white'));
         randomSpawnRate = _utils2.default.randomIntFromRange(75, 200);
     }
 }
